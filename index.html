@@ -17,8 +17,6 @@
             overflow: hidden;
             color: white;
             touch-action: none;
-            text-align: center;
-            /* Chống bôi đen và copy toàn trang */
             user-select: none;
             -webkit-user-select: none;
         }
@@ -27,8 +25,8 @@
             padding: 20px;
             margin-bottom: 50px;
             position: relative;
-            z-index: 10; /* Đảm bảo chữ luôn nằm trên cùng */
-            pointer-events: none; /* Chuột/tay có thể xuyên qua chữ để chạm vào nút bên dưới */
+            z-index: 10;
+            pointer-events: none;
         }
 
         .rainbow-text {
@@ -56,32 +54,31 @@
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 20px;
+            padding: 15px 25px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
             border-radius: 12px;
             position: absolute;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            z-index: 5; /* Nút nằm dưới tiêu đề */
+            z-index: 5;
+            min-width: 100px;
+            text-align: center;
         }
 
         #btnYes {
             background-color: #28a745;
             color: white;
             top: 70%;
-            left: 15%;
-            width: 120px;
+            left: 10%;
         }
 
         #btnNo {
             background-color: #dc3545;
             color: white;
             top: 70%;
-            right: 15%;
-            min-width: 80px;
-            max-width: 200px;
+            right: 10%;
         }
     </style>
 </head>
@@ -96,20 +93,45 @@
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
+        let clickCount = 0;
+        let isFakePity = false;
+
         function sayYes() {
-            alert("Đã bảo là ngu mà lại còn bấm 'Đúng' nữa!");
-            alert("Chúc mừng Ngọc đã gia nhập hội những người NGU nhất hành tinh!");
-            window.location.href = "https://www.google.com/search?q=cách+giảm+độ+ngu+bẩm+sinh";
+            alert("Vừa định tha mà lại tự nhận mình NGU à? Hahaha!");
+            alert("Thôi xong, virus NGU đã chiếm lấy não Ngọc!");
+            window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bản+thân";
         }
 
         function troll(obj) {
-            const randomWidth = Math.floor(Math.random() * (200 - 80 + 1)) + 80;
+            clickCount++;
+
+            // Sau 10 lần ấn hụt, bắt đầu giở trò "tha cho"
+            if (clickCount >= 10 && !isFakePity) {
+                isFakePity = true;
+                obj.innerText = "tha cho này ấn đc r đó";
+                obj.style.backgroundColor = "#007bff"; // Đổi sang màu xanh dương cho tin tưởng
+                obj.style.width = "220px";
+                obj.style.fontSize = "15px";
+                
+                // Cho nút đứng im một nhịp để Ngọc kịp bấm
+                return; 
+            }
+
+            // Nếu Ngọc bấm vào cái nút "tha cho" này
+            if (isFakePity) {
+                obj.innerText = "ĐÚNG";
+                obj.style.backgroundColor = "#28a745";
+                obj.style.fontSize = "20px";
+                sayYes();
+                return;
+            }
+
+            // Logic nhảy ngẫu nhiên bình thường
+            const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
-            // Giới hạn để nút không nhảy vào khu vực tiêu đề (phần trên màn hình)
-            // Nút sẽ chỉ nhảy ở nửa dưới màn hình (từ 40% trở xuống)
-            const minTop = window.innerHeight * 0.4; 
-            const maxX = window.innerWidth - randomWidth - 40;
+            const minTop = window.innerHeight * 0.4;
+            const maxX = window.innerWidth - obj.clientWidth - 40;
             const maxY = window.innerHeight - obj.clientHeight - 40;
 
             const randX = Math.floor(Math.random() * maxX) + 20;
