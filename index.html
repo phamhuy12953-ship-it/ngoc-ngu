@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             color: white;
             touch-action: none;
@@ -23,7 +23,7 @@
             position: relative;
         }
 
-        /* Hiệu ứng toả nền mặt cười */
+        /* Lớp nền toả màu hiệu ứng mặt cười */
         #ending-overlay {
             position: absolute;
             top: 50%;
@@ -33,23 +33,26 @@
             background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
             border-radius: 50%;
             opacity: 0;
-            transition: all 1s ease-out;
-            z-index: 15;
+            transition: all 1s ease-out; /* Hiệu ứng toả mượt 1 giây */
+            z-index: 1; /* Nằm dưới chữ nhưng trên nút */
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none;
+            pointer-events: none; /* Chuột xuyên qua được */
         }
 
+        /* Mặt cười code, không phải ảnh */
         #ending-overlay::after {
             content: "=))))";
-            font-size: 80px;
+            font-size: 100px;
             font-weight: 900;
             color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
             opacity: 0;
-            transition: opacity 0.5s ease-out 0.8s;
+            transition: opacity 0.5s ease-out 0.8s; /* Hiện sau khi nền toả xong */
         }
 
+        /* Khi lớp nền toả ra */
         #ending-overlay.show {
             width: 300vw;
             height: 300vw;
@@ -58,14 +61,17 @@
             opacity: 1;
         }
 
-        #ending-overlay.show::after { opacity: 1; }
+        /* Hiện mặt cười */
+        #ending-overlay.show::after {
+            opacity: 1;
+        }
 
         .title {
             padding: 20px;
             margin-bottom: 50px;
             position: relative;
-            z-index: 20;
-            pointer-events: none;
+            z-index: 10; /* Chữ luôn trên cùng */
+            pointer-events: none; /* Chuột/tay có thể xuyên qua chữ để chạm vào nút bên dưới */
         }
 
         .rainbow-text {
@@ -88,7 +94,9 @@
             opacity: 0.8;
         }
 
-        @keyframes flow { to { background-position: 200% center; } }
+        @keyframes flow {
+            to { background-position: 200% center; }
+        }
 
         .btn {
             padding: 15px 25px;
@@ -99,14 +107,24 @@
             position: absolute;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            z-index: 10;
+            z-index: 5; /* Nút nằm dưới chữ và nền toả */
             min-width: 100px;
             text-align: center;
-            white-space: nowrap;
         }
 
-        #btnYes { background-color: #28a745; color: white; top: 65%; left: 15%; width: 120px; }
-        #btnNo { background-color: #dc3545; color: white; top: 65%; right: 15%; }
+        #btnYes {
+            background-color: #28a745;
+            color: white;
+            top: 70%;
+            left: 10%;
+        }
+
+        #btnNo {
+            background-color: #dc3545;
+            color: white;
+            top: 70%;
+            right: 10%;
+        }
     </style>
 </head>
 <body>
@@ -118,7 +136,7 @@
         <span class="normal-text">chan bố mày đi</span>
     </div>
 
-    <button id="btnYes" class="btn" onclick="startEnding(this)">ĐÚNG</button>
+    <button id="btnYes" class="btn" onclick="autoRedirect(this)">ĐÚNG</button>
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
@@ -126,29 +144,36 @@
         let isFakePity = false;
         let isDone = false;
 
-        function startEnding(obj) {
+        function autoRedirect(obj) {
             if (isDone) return;
             isDone = true;
 
+            // 1. Chuyển ngay thành chữ ĐÚNG xanh lè
             obj.innerText = "ĐÚNG";
             obj.style.backgroundColor = "#28a745";
             obj.style.width = "120px";
             obj.style.fontSize = "20px";
-            obj.style.zIndex = "25"; // Đưa nút lên trên lớp phủ để vẫn nhìn thấy chữ ĐÚNG
+            obj.style.zIndex = "11"; // Nút nổi lên trên nền mặt cười
 
+            // 2. Ngọc đứng hình 1 giây nhìn chữ ĐÚNG...
+
+            // 3. Kích hoạt hiệu ứng toả nền mặt cười
             setTimeout(() => {
-                document.getElementById('ending-overlay').classList.add('show');
-            }, 1000);
+                const overlay = document.getElementById('ending-overlay');
+                overlay.classList.add('show');
+            }, 1000); // 1 giây sau khi bấm
 
+            // 4. Đợi nền toả và mặt cười hiện xong, rồi mới chuyển trang
             setTimeout(() => {
                 window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
-            }, 3000);
+            }, 3000); // 3 giây tổng cộng (1s nhìn chữ + 2s toả nền và mặt cười)
         }
 
         function troll(obj) {
             if (isDone) return;
             clickCount++;
 
+            // Sau 5 lần vồ hụt, hiện nút tha cho
             if (clickCount >= 5 && !isFakePity) {
                 isFakePity = true;
                 obj.innerText = "tha cho này ấn đc r đó";
@@ -158,11 +183,15 @@
                 return; 
             }
 
+            // Nếu Ngọc bấm vào cái nút "tha cho"
             if (isFakePity) {
-                startEnding(obj);
+                // Đưa nút lên trên để vẫn nhìn thấy khi nền toả ra
+                obj.style.zIndex = "11";
+                autoRedirect(obj);
                 return;
             }
 
+            // Logic nhảy ngẫu nhiên bình thường (tránh vùng chữ)
             const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
