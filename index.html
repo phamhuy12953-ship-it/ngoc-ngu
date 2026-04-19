@@ -18,12 +18,17 @@
             color: white;
             touch-action: none;
             text-align: center;
+            /* Chống bôi đen và copy toàn trang */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .title {
             padding: 20px;
             margin-bottom: 50px;
-            z-index: 1;
+            position: relative;
+            z-index: 10; /* Đảm bảo chữ luôn nằm trên cùng */
+            pointer-events: none; /* Chuột/tay có thể xuyên qua chữ để chạm vào nút bên dưới */
         }
 
         .rainbow-text {
@@ -43,6 +48,7 @@
             font-weight: normal;
             color: white;
             display: block;
+            opacity: 0.8;
         }
 
         @keyframes flow {
@@ -58,16 +64,13 @@
             position: absolute;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            white-space: nowrap; /* Không cho chữ xuống dòng */
+            z-index: 5; /* Nút nằm dưới tiêu đề */
         }
 
         #btnYes {
             background-color: #28a745;
             color: white;
-            top: 65%;
+            top: 70%;
             left: 15%;
             width: 120px;
         }
@@ -75,10 +78,10 @@
         #btnNo {
             background-color: #dc3545;
             color: white;
-            top: 65%;
+            top: 70%;
             right: 15%;
-            min-width: 80px; /* Độ dài tối thiểu */
-            max-width: 200px; /* Giới hạn không cho nó phình to quá */
+            min-width: 80px;
+            max-width: 200px;
         }
     </style>
 </head>
@@ -100,16 +103,17 @@
         }
 
         function troll(obj) {
-            // 1. Thay đổi độ dài (width) ngẫu nhiên từ 80px đến 200px
             const randomWidth = Math.floor(Math.random() * (200 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
-            // 2. Tính toán vị trí nhảy ngẫu nhiên
+            // Giới hạn để nút không nhảy vào khu vực tiêu đề (phần trên màn hình)
+            // Nút sẽ chỉ nhảy ở nửa dưới màn hình (từ 40% trở xuống)
+            const minTop = window.innerHeight * 0.4; 
             const maxX = window.innerWidth - randomWidth - 40;
             const maxY = window.innerHeight - obj.clientHeight - 40;
 
             const randX = Math.floor(Math.random() * maxX) + 20;
-            const randY = Math.floor(Math.random() * maxY) + 20;
+            const randY = Math.floor(Math.random() * (maxY - minTop)) + minTop;
 
             obj.style.left = randX + "px";
             obj.style.top = randY + "px";
