@@ -1,69 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<meta charset="UTF-8">
-<style>
-  body {
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: sans-serif;
-    color: white;
-    cursor: none; /* Giấu luôn con trỏ chuột cho nó sợ */
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Ngọc</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Không cho cuộn trang để nút không chạy ra ngoài */
+            color: white;
+            text-align: center;
+        }
 
-  .rainbow-text {
-    font-size: 50px;
-    font-weight: bold;
-    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-    background-size: 400% 400%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: flow 3s linear infinite;
-  }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(to right, #ff0000, #00ff00, #0000ff, #ff0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: flow 3s linear infinite;
+            padding: 20px;
+            margin-bottom: 50px;
+        }
 
-  @keyframes flow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-  }
+        @keyframes flow {
+            to { background-position: 200% center; }
+        }
 
-  #warning {
-    color: red;
-    font-size: 20px;
-    margin-top: 20px;
-    display: none;
-  }
-</style>
-<script>
-  // Chiêu trêu: Hiện thông báo liên tục khi định thoát hoặc bấm vào màn hình
-  function annoying() {
-    alert("Ngọc định chạy đi đâu?");
-    alert("Chưa nghe hết mà đã chạy à?");
-    alert("Bấm OK 10 lần nữa để thoát nhé haha");
-  }
+        .btn {
+            padding: 15px 35px;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            position: absolute;
+            transition: all 0.2s ease; /* Tốc độ trượt: 0.2 giây */
+            touch-action: none; /* Quan trọng: Chặn các thao tác mặc định của đt để nút chạy mượt */
+        }
 
-  // Khi click vào màn hình là hiện thông báo
-  document.onclick = function() {
-    annoying();
-  };
-</script>
+        #btnYes {
+            background-color: #28a745;
+            color: white;
+            top: 60%;
+            left: 20%;
+        }
+
+        #btnNo {
+            background-color: #dc3545;
+            color: white;
+            top: 60%;
+            right: 20%;
+        }
+    </style>
 </head>
-<body onclick="annoying()">
+<body>
 
-  <div class="rainbow-text">Ngọc bị ngu hahaha</div>
-  <h2 style="color: white;">chan bố mày đi</h2>
-  
-  <p id="warning">CẢNH BÁO: MÁY CỦA NGỌC ĐÃ BỊ NHIỄM VIRUS NGU!(10tr r t tha) </p>
+    <div class="title">Ngọc bị ngu đúng không? <br> <span style="font-size: 18px; color: white;">(Thoát ra là chan bố mày đi)</span></div>
 
-  <script>
-    // Sau 3 giây hiện dòng cảnh báo
-    setTimeout(() => {
-      document.getElementById('warning').style.display = 'block';
-    }, 3000);
-  </script>
+    <button id="btnYes" class="btn" onclick="sayYes()">ĐÚNG</button>
+    <button id="btnNo" class="btn" ontouchstart="moveButton()" onmouseover="moveButton()">KHÔNG</button>
+
+    <script>
+        function sayYes() {
+            alert("Biết thế là tốt! Hahaha");
+            alert("Máy Ngọc đã chính thức nhiễm virus NGU!");
+            window.location.href = "https://www.google.com/search?q=tại+sao+tôi+ngu";
+        }
+
+        function moveButton() {
+            const btnNo = document.getElementById('btnNo');
+            
+            // Tính toán vùng an toàn để nút không chạy mất khỏi màn hình
+            const maxX = window.innerWidth - btnNo.clientWidth - 20;
+            const maxY = window.innerHeight - btnNo.clientHeight - 20;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
+    </script>
 </body>
 </html>
