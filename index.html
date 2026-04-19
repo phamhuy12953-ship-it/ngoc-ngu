@@ -89,47 +89,50 @@
         <span class="normal-text">chan bố mày đi</span>
     </div>
 
-    <button id="btnYes" class="btn" onclick="sayYes()">ĐÚNG</button>
+    <button id="btnYes" class="btn" onclick="sayYes(this)">ĐÚNG</button>
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
         let clickCount = 0;
         let isFakePity = false;
+        let isProcessing = false;
 
-        function sayYes() {
-            alert("Vừa định tha mà lại tự nhận mình NGU à? Hahaha!");
-            alert("Chúc mừng Ngọc đã gia nhập hội những người NGU nhất hành tinh!");
-            window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bản+thân";
+        function sayYes(obj) {
+            if(isProcessing) return;
+            isProcessing = true;
+            
+            // Đảm bảo chữ hiện là ĐÚNG và màu xanh
+            obj.innerText = "ĐÚNG";
+            obj.style.backgroundColor = "#28a745";
+            obj.style.width = "120px";
+
+            // Đợi 2 giây rồi mới chuyển trang
+            setTimeout(() => {
+                window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
+            }, 2000);
         }
 
         function troll(obj) {
+            if(isProcessing) return;
             clickCount++;
 
-            // Chỉnh xuống tầm 5-6 lần (ngẫu nhiên 5 hoặc 6 cho nó thật)
-            let limit = 5; 
-
-            if (clickCount >= limit && !isFakePity) {
+            // Sau 5 lần vồ hụt
+            if (clickCount >= 5 && !isFakePity) {
                 isFakePity = true;
-                obj.innerText = "Tôi không ngu (nể lắm mới tha đấy)";
+                obj.innerText = "tha cho này ấn đc r đó";
                 obj.style.backgroundColor = "#007bff"; 
                 obj.style.width = "220px";
                 obj.style.fontSize = "15px";
-                
-                // Nút đứng im để Ngọc tưởng thật
                 return; 
             }
 
-            // Nếu đã hiện chữ tha mà Ngọc bấm vào
+            // Khi Ngọc bấm vào nút "tha cho"
             if (isFakePity) {
-                obj.innerText = "ĐÚNG";
-                obj.style.backgroundColor = "#28a745";
-                obj.style.fontSize = "20px";
-                // Chờ 0.1s cho nó hiện chữ ĐÚNG xong mới hiện Alert
-                setTimeout(sayYes, 100);
+                sayYes(obj);
                 return;
             }
 
-            // Nhảy ngẫu nhiên bình thường
+            // Nhảy ngẫu nhiên
             const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
