@@ -23,9 +23,9 @@
         .title {
             padding: 20px;
             margin-bottom: 50px;
+            z-index: 1;
         }
 
-        /* Chỉ có dòng này nhấp nháy 7 màu */
         .rainbow-text {
             font-size: 32px;
             font-weight: bold;
@@ -38,7 +38,6 @@
             margin-bottom: 10px;
         }
 
-        /* Dòng dưới chữ thường màu trắng */
         .normal-text {
             font-size: 18px;
             font-weight: normal;
@@ -52,33 +51,34 @@
 
         .btn {
             padding: 15px 30px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             border: none;
             border-radius: 12px;
             position: absolute;
-            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            min-width: 140px;
             display: flex;
             justify-content: center;
             align-items: center;
+            white-space: nowrap; /* Không cho chữ xuống dòng */
         }
 
-        /* Nút Đúng gốc nằm im */
         #btnYes {
             background-color: #28a745;
             color: white;
             top: 65%;
             left: 15%;
+            width: 120px;
         }
 
-        /* Nút Không sẽ chạy ngẫu nhiên khi chạm/click */
         #btnNo {
             background-color: #dc3545;
             color: white;
             top: 65%;
             right: 15%;
+            min-width: 80px; /* Độ dài tối thiểu */
+            max-width: 200px; /* Giới hạn không cho nó phình to quá */
         }
     </style>
 </head>
@@ -90,7 +90,6 @@
     </div>
 
     <button id="btnYes" class="btn" onclick="sayYes()">ĐÚNG</button>
-    
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
@@ -101,11 +100,14 @@
         }
 
         function troll(obj) {
-            // Lấy kích thước vùng an toàn để nút không bay mất khỏi màn hình
-            const maxX = window.innerWidth - obj.clientWidth - 40;
+            // 1. Thay đổi độ dài (width) ngẫu nhiên từ 80px đến 200px
+            const randomWidth = Math.floor(Math.random() * (200 - 80 + 1)) + 80;
+            obj.style.width = randomWidth + "px";
+
+            // 2. Tính toán vị trí nhảy ngẫu nhiên
+            const maxX = window.innerWidth - randomWidth - 40;
             const maxY = window.innerHeight - obj.clientHeight - 40;
 
-            // Tính toán vị trí ngẫu nhiên hoàn toàn mới
             const randX = Math.floor(Math.random() * maxX) + 20;
             const randY = Math.floor(Math.random() * maxY) + 20;
 
