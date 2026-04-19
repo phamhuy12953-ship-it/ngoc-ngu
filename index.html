@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Ngọc</title>
     <style>
         body {
@@ -14,21 +14,22 @@
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* Không cho cuộn trang để nút không chạy ra ngoài */
+            overflow: hidden;
             color: white;
-            text-align: center;
+            touch-action: none;
         }
 
         .title {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
-            background: linear-gradient(to right, #ff0000, #00ff00, #0000ff, #ff0000);
+            background: linear-gradient(to right, #ff0000, #02ff2c, #0019ff, #ff0000);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: flow 3s linear infinite;
+            animation: flow 2s linear infinite;
             padding: 20px;
-            margin-bottom: 50px;
+            z-index: 1;
+            pointer-events: none; /* Để tiêu đề không vướng chỗ nút chạy */
         }
 
         @keyframes flow {
@@ -36,57 +37,62 @@
         }
 
         .btn {
-            padding: 15px 35px;
-            font-size: 22px;
+            padding: 15px 30px;
+            font-size: 20px;
             font-weight: bold;
             border: none;
-            border-radius: 15px;
+            border-radius: 50px; /* Làm nút bo tròn cho giống gaming */
             position: absolute;
-            transition: all 0.2s ease; /* Tốc độ trượt: 0.2 giây */
-            touch-action: none; /* Quan trọng: Chặn các thao tác mặc định của đt để nút chạy mượt */
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: none;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
         #btnYes {
             background-color: #28a745;
             color: white;
-            top: 60%;
-            left: 20%;
+            z-index: 2;
+            /* Vị trí mặc định lúc đầu */
+            top: 55%;
+            left: 15%;
         }
 
         #btnNo {
             background-color: #dc3545;
             color: white;
-            top: 60%;
-            right: 20%;
+            z-index: 2;
+            /* Vị trí mặc định lúc đầu */
+            top: 55%;
+            right: 15%;
         }
     </style>
 </head>
 <body>
 
-    <div class="title">Ngọc bị ngu đúng không? <br> <span style="font-size: 18px; color: white;">(Thoát ra là NGUUUU)</span></div>
+    <div class="title">Ngọc bị ngu đúng không? <br> <span style="font-size: 16px; color: #aaa;">(Thoát ra là dốt 🤣)</span></div>
 
     <button id="btnYes" class="btn" onclick="sayYes()">ĐÚNG</button>
-    <button id="btnNo" class="btn" ontouchstart="moveButton()" onmouseover="moveButton()">KHÔNG</button>
+    <button id="btnNo" class="btn" ontouchstart="moveButton(this)" onmouseover="moveButton(this)">KHÔNG</button>
 
     <script>
         function sayYes() {
-            alert("Biết thế là tốt! Hahaha");
-            alert("Máy Ngọc đã chính thức nhiễm virus NGU!");
-            window.location.href = "https://www.google.com/search?q=tại+sao+tôi+ngu";
+            alert("Đã bảo là ngu mà lại còn bấm 'Đúng' nữa!");
+            alert("Virus NGU đã xâm nhập vào máy Ngọc thành công 100%!");
+            window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
         }
 
-        function moveButton() {
-            const btnNo = document.getElementById('btnNo');
-            
-            // Tính toán vùng an toàn để nút không chạy mất khỏi màn hình
-            const maxX = window.innerWidth - btnNo.clientWidth - 20;
-            const maxY = window.innerHeight - btnNo.clientHeight - 20;
+        function moveButton(obj) {
+            // Lấy kích thước màn hình
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
 
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
+            // Tính toán vị trí ngẫu nhiên hoàn toàn mới
+            // Trừ đi khoảng 100px để nút không bị dính sát mép màn hình khó bấm
+            const randX = Math.floor(Math.random() * (windowWidth - obj.clientWidth - 40)) + 20;
+            const randY = Math.floor(Math.random() * (windowHeight - obj.clientHeight - 40)) + 20;
 
-            btnNo.style.left = randomX + 'px';
-            btnNo.style.top = randomY + 'px';
+            obj.style.left = randX + "px";
+            obj.style.top = randY + "px";
         }
     </script>
 </body>
