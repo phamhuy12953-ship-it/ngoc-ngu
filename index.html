@@ -13,19 +13,64 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             color: white;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Lớp nền toả màu hiệu ứng mặt cười */
+        #ending-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 1s ease-out; /* Hiệu ứng toả mượt 1 giây */
+            z-index: 1; /* Nằm dưới chữ nhưng trên nút */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Chuột xuyên qua được */
+        }
+
+        /* Mặt cười code, không phải ảnh */
+        #ending-overlay::after {
+            content: "=))))";
+            font-size: 100px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            opacity: 0;
+            transition: opacity 0.5s ease-out 0.8s; /* Hiện sau khi nền toả xong */
+        }
+
+        /* Khi lớp nền toả ra */
+        #ending-overlay.show {
+            width: 300vw;
+            height: 300vw;
+            top: -100vw;
+            left: -100vw;
+            opacity: 1;
+        }
+
+        /* Hiện mặt cười */
+        #ending-overlay.show::after {
+            opacity: 1;
         }
 
         .title {
             padding: 20px;
             margin-bottom: 50px;
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Chữ luôn trên cùng */
             pointer-events: none;
         }
 
@@ -62,7 +107,7 @@
             position: absolute;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            z-index: 5;
+            z-index: 5; /* Nút nằm dưới chữ và nền toả */
             min-width: 100px;
             text-align: center;
         }
@@ -84,70 +129,11 @@
 </head>
 <body>
 
+    <div id="ending-overlay"></div>
+
     <div class="title">
         <span class="rainbow-text">Ngọc bị ngu hahaha</span>
         <span class="normal-text">chan bố mày đi</span>
     </div>
 
-    <button id="btnYes" class="btn" onclick="autoRedirect(this)">ĐÚNG</button>
-    <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
-
-    <script>
-        let clickCount = 0;
-        let isFakePity = false;
-        let isDone = false;
-
-        function autoRedirect(obj) {
-            if (isDone) return;
-            isDone = true;
-
-            
-            obj.innerText = "ĐÚNG";
-            obj.style.backgroundColor = "#28a745";
-            obj.style.width = "120px";
-            obj.style.fontSize = "20px";
-
-            
-            setTimeout(() => {
-                window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
-            }, 1000);
-        }
-
-        function troll(obj) {
-            if (isDone) return;
-            clickCount++;
-
-           
-            if (clickCount >= 5 && !isFakePity) {
-                isFakePity = true;
-                obj.innerText = "tha cho này ấn đc r đó";
-                obj.style.backgroundColor = "#007bff"; 
-                obj.style.width = "220px";
-                obj.style.fontSize = "15px";
-                return; 
-            }
-
-            
-            if (isFakePity) {
-                
-                autoRedirect(obj);
-                return;
-            }
-
-            
-            const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
-            obj.style.width = randomWidth + "px";
-
-            const minTop = window.innerHeight * 0.4;
-            const maxX = window.innerWidth - obj.clientWidth - 40;
-            const maxY = window.innerHeight - obj.clientHeight - 40;
-
-            const randX = Math.floor(Math.random() * maxX) + 20;
-            const randY = Math.floor(Math.random() * (maxY - minTop)) + minTop;
-
-            obj.style.left = randX + "px";
-            obj.style.top = randY + "px";
-        }
-    </script>
-</body>
-</html>
+    <button id="btn
