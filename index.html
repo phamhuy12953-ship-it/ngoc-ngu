@@ -17,19 +17,33 @@
             overflow: hidden;
             color: white;
             touch-action: none;
+            text-align: center;
         }
 
         .title {
-            font-size: 26px;
+            padding: 20px;
+            margin-bottom: 50px;
+        }
+
+        /* Chỉ có dòng này nhấp nháy 7 màu */
+        .rainbow-text {
+            font-size: 32px;
             font-weight: bold;
-            background: linear-gradient(to right, #ff0000, #02ff2c, #0019ff, #ff0000);
+            display: block;
+            background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: flow 2s linear infinite;
-            padding: 20px;
-            z-index: 1;
-            pointer-events: none; /* Để tiêu đề không vướng chỗ nút chạy */
+            animation: flow 3s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        /* Dòng dưới chữ thường màu trắng */
+        .normal-text {
+            font-size: 18px;
+            font-weight: normal;
+            color: white;
+            display: block;
         }
 
         @keyframes flow {
@@ -38,58 +52,62 @@
 
         .btn {
             padding: 15px 30px;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             border: none;
-            border-radius: 50px; /* Làm nút bo tròn cho giống gaming */
+            border-radius: 12px;
             position: absolute;
             transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            touch-action: none;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            cursor: pointer;
+            min-width: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* Nút Đúng gốc nằm im */
         #btnYes {
             background-color: #28a745;
             color: white;
-            z-index: 2;
-            /* Vị trí mặc định lúc đầu */
-            top: 55%;
+            top: 65%;
             left: 15%;
         }
 
+        /* Nút Không sẽ chạy ngẫu nhiên khi chạm/click */
         #btnNo {
             background-color: #dc3545;
             color: white;
-            z-index: 2;
-            /* Vị trí mặc định lúc đầu */
-            top: 55%;
+            top: 65%;
             right: 15%;
         }
     </style>
 </head>
 <body>
 
-    <div class="title">Ngọc bị ngu đúng không? <br> <span style="font-size: 16px; color: #aaa;">(Thoát ra là dốt 🤣)</span></div>
+    <div class="title">
+        <span class="rainbow-text">Ngọc bị ngu hahaha</span>
+        <span class="normal-text">chan bố mày đi</span>
+    </div>
 
     <button id="btnYes" class="btn" onclick="sayYes()">ĐÚNG</button>
-    <button id="btnNo" class="btn" ontouchstart="moveButton(this)" onmouseover="moveButton(this)">KHÔNG</button>
+    
+    <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
         function sayYes() {
             alert("Đã bảo là ngu mà lại còn bấm 'Đúng' nữa!");
-            alert("Virus NGU đã xâm nhập vào máy Ngọc thành công 100%!");
-            window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
+            alert("Chúc mừng Ngọc đã gia nhập hội những người NGU nhất hành tinh!");
+            window.location.href = "https://www.google.com/search?q=cách+giảm+độ+ngu+bẩm+sinh";
         }
 
-        function moveButton(obj) {
-            // Lấy kích thước màn hình
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
+        function troll(obj) {
+            // Lấy kích thước vùng an toàn để nút không bay mất khỏi màn hình
+            const maxX = window.innerWidth - obj.clientWidth - 40;
+            const maxY = window.innerHeight - obj.clientHeight - 40;
 
             // Tính toán vị trí ngẫu nhiên hoàn toàn mới
-            // Trừ đi khoảng 100px để nút không bị dính sát mép màn hình khó bấm
-            const randX = Math.floor(Math.random() * (windowWidth - obj.clientWidth - 40)) + 20;
-            const randY = Math.floor(Math.random() * (windowHeight - obj.clientHeight - 40)) + 20;
+            const randX = Math.floor(Math.random() * maxX) + 20;
+            const randY = Math.floor(Math.random() * maxY) + 20;
 
             obj.style.left = randX + "px";
             obj.style.top = randY + "px";
