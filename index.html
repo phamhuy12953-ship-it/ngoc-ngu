@@ -89,34 +89,35 @@
         <span class="normal-text">chan bố mày đi</span>
     </div>
 
-    <button id="btnYes" class="btn" onclick="sayYes(this)">ĐÚNG</button>
+    <button id="btnYes" class="btn" onclick="autoRedirect(this)">ĐÚNG</button>
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <script>
         let clickCount = 0;
         let isFakePity = false;
-        let isProcessing = false;
+        let isDone = false;
 
-        function sayYes(obj) {
-            if(isProcessing) return;
-            isProcessing = true;
+        function autoRedirect(obj) {
+            if (isDone) return;
+            isDone = true;
+
             
-            // Đảm bảo chữ hiện là ĐÚNG và màu xanh
             obj.innerText = "ĐÚNG";
             obj.style.backgroundColor = "#28a745";
             obj.style.width = "120px";
+            obj.style.fontSize = "20px";
 
-            // Đợi 2 giây rồi mới chuyển trang
+            
             setTimeout(() => {
                 window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
-            }, 2000);
+            }, 1000);
         }
 
         function troll(obj) {
-            if(isProcessing) return;
+            if (isDone) return;
             clickCount++;
 
-            // Sau 5 lần vồ hụt
+           
             if (clickCount >= 5 && !isFakePity) {
                 isFakePity = true;
                 obj.innerText = "tha cho này ấn đc r đó";
@@ -126,13 +127,14 @@
                 return; 
             }
 
-            // Khi Ngọc bấm vào nút "tha cho"
+            
             if (isFakePity) {
-                sayYes(obj);
+                
+                autoRedirect(obj);
                 return;
             }
 
-            // Nhảy ngẫu nhiên
+            
             const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
