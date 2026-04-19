@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .rainbow-text {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    /* Tạo hiệu ứng cầu vồng */
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    /* Hiệu ứng nhấp nháy */
+    animation: rainbow 0.5s infinite, blink 0.5s step-end infinite;
+  }
+
+  @keyframes rainbow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .sub-text {
+    font-size: 30px;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="rainbow-text">Ngọc bị ngu hahaha</div>
+  <br>
+  <div class="sub-text">chan bố mày đi</div>
+
+</body>
+</html>
