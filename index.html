@@ -98,35 +98,38 @@
 
         function sayYes() {
             alert("Vừa định tha mà lại tự nhận mình NGU à? Hahaha!");
-            alert("Thôi xong, virus NGU đã chiếm lấy não Ngọc!");
+            alert("Chúc mừng Ngọc đã gia nhập hội những người NGU nhất hành tinh!");
             window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bản+thân";
         }
 
         function troll(obj) {
             clickCount++;
 
-            // Sau 10 lần ấn hụt, bắt đầu giở trò "tha cho"
-            if (clickCount >= 10 && !isFakePity) {
+            // Chỉnh xuống tầm 5-6 lần (ngẫu nhiên 5 hoặc 6 cho nó thật)
+            let limit = 5; 
+
+            if (clickCount >= limit && !isFakePity) {
                 isFakePity = true;
                 obj.innerText = "tha cho này ấn đc r đó";
-                obj.style.backgroundColor = "#007bff"; // Đổi sang màu xanh dương cho tin tưởng
+                obj.style.backgroundColor = "#007bff"; 
                 obj.style.width = "220px";
                 obj.style.fontSize = "15px";
                 
-                // Cho nút đứng im một nhịp để Ngọc kịp bấm
+                // Nút đứng im để Ngọc tưởng thật
                 return; 
             }
 
-            // Nếu Ngọc bấm vào cái nút "tha cho" này
+            // Nếu đã hiện chữ tha mà Ngọc bấm vào
             if (isFakePity) {
                 obj.innerText = "ĐÚNG";
                 obj.style.backgroundColor = "#28a745";
                 obj.style.fontSize = "20px";
-                sayYes();
+                // Chờ 0.1s cho nó hiện chữ ĐÚNG xong mới hiện Alert
+                setTimeout(sayYes, 100);
                 return;
             }
 
-            // Logic nhảy ngẫu nhiên bình thường
+            // Nhảy ngẫu nhiên bình thường
             const randomWidth = Math.floor(Math.random() * (150 - 80 + 1)) + 80;
             obj.style.width = randomWidth + "px";
 
