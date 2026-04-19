@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <style>
   body {
-    /* Nền đen toàn màn hình */
     background-color: black;
     display: flex;
     flex-direction: column;
@@ -11,47 +11,59 @@
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+    font-family: sans-serif;
+    color: white;
+    cursor: none; /* Giấu luôn con trỏ chuột cho nó sợ */
   }
 
   .rainbow-text {
-    font-size: 60px;
-    font-weight: 900;
-    /* Hiệu ứng dải màu RGB bàn phím */
-    background: linear-gradient(
-      to right, 
-      #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000
-    );
-    background-size: 200% auto;
+    font-size: 50px;
+    font-weight: bold;
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 400% 400%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* Chuyển màu mượt, không nhấp nháy giật mắt */
-    animation: flow 5s linear infinite;
-    text-align: center;
+    animation: flow 3s linear infinite;
   }
 
   @keyframes flow {
-    to {
-      background-position: 200% center;
-    }
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
   }
 
-  .sub-text {
-    font-size: 35px;
-    color: #ffffff;
-    font-weight: bold;
+  #warning {
+    color: red;
+    font-size: 20px;
     margin-top: 20px;
-    opacity: 0.8;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    display: none;
   }
 </style>
+<script>
+  // Chiêu trêu: Hiện thông báo liên tục khi định thoát hoặc bấm vào màn hình
+  function annoying() {
+    alert("Ngọc định chạy đi đâu?");
+    alert("Chưa nghe hết mà đã chạy à?");
+    alert("Bấm OK 10 lần nữa để thoát nhé haha");
+  }
+
+  // Khi click vào màn hình là hiện thông báo
+  document.onclick = function() {
+    annoying();
+  };
+</script>
 </head>
-<body>
+<body onclick="annoying()">
 
   <div class="rainbow-text">Ngọc bị ngu hahaha</div>
-  <div class="sub-text">chan bố mày đi</div>
+  <h2 style="color: white;">chan bố mày đi</h2>
+  
+  <p id="warning">CẢNH BÁO: MÁY CỦA NGỌC ĐÃ BỊ NHIỄM VIRUS NGU!(10tr r t tha) </p>
 
+  <script>
+    // Sau 3 giây hiện dòng cảnh báo
+    setTimeout(() => {
+      document.getElementById('warning').style.display = 'block';
+    }, 3000);
+  </script>
 </body>
 </html>
