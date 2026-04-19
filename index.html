@@ -32,8 +32,8 @@
             background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
             border-radius: 50%;
             opacity: 0;
-            transition: all 1s ease-out;
-            z-index: 1; /* Nằm dưới cùng */
+            transition: all 0.8s ease-out;
+            z-index: 100; /* Đè lên tất cả */
             transform: translate(-50%, -50%);
             pointer-events: none;
         }
@@ -48,17 +48,15 @@
             font-weight: 900;
             color: white;
             opacity: 0;
-            z-index: 2; /* Trên cái nền hồng */
+            z-index: 101; /* Trên cái nền hồng */
             transition: opacity 0.5s ease-out;
             pointer-events: none;
             white-space: nowrap;
         }
 
-        .title {
-            padding: 20px;
-            margin-bottom: 50px;
-            position: relative;
-            z-index: 10; /* Chữ "Ngọc bị ngu" luôn nổi trên mặt cười */
+        #main-content {
+            transition: opacity 0.5s ease;
+            z-index: 10;
         }
 
         .rainbow-text {
@@ -72,7 +70,7 @@
             animation: flow 3s linear infinite;
         }
 
-        .normal-text { font-size: 18px; color: white; opacity: 0.8; }
+        .normal-text { font-size: 18px; color: white; opacity: 0.8; margin-top: 10px; display: block; }
 
         @keyframes flow { to { background-position: 200% center; } }
 
@@ -85,16 +83,17 @@
             position: absolute;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            z-index: 5;
+            z-index: 50;
             min-width: 100px;
         }
 
         #btnYes { background-color: #28a745; color: white; top: 70%; left: 10%; }
         #btnNo { background-color: #dc3545; color: white; top: 70%; right: 10%; }
 
-        /* Trạng thái khi kích hoạt cú lừa */
+        /* Hiệu ứng kích hoạt */
         .show-glow { width: 300vw !important; height: 300vw !important; opacity: 1 !important; }
         .show-smiley { opacity: 1 !important; }
+        .hide-all { opacity: 0 !important; pointer-events: none !important; }
     </style>
 </head>
 <body>
@@ -102,9 +101,11 @@
     <div id="bg-glow"></div>
     <div id="smiley">=))))</div>
 
-    <div class="title">
-        <span class="rainbow-text">Ngọc bị ngu hahaha</span>
-        <span class="normal-text">chan bố mày đi</span>
+    <div id="main-content">
+        <div class="title">
+            <span class="rainbow-text">Ngọc bị ngu hahaha</span>
+            <span class="normal-text">chan bố mày đi</span>
+        </div>
     </div>
 
     <button id="btnYes" class="btn" onclick="triggerTrap(this)">ĐÚNG</button>
@@ -119,22 +120,28 @@
             if (locked) return;
             locked = true;
 
-            // Chuyển nút thành ĐÚNG xanh
+            // 1. Chuyển nút thành ĐÚNG
             obj.innerText = "ĐÚNG";
             obj.style.backgroundColor = "#28a745";
             obj.style.width = "120px";
-            obj.style.zIndex = "11"; // Nút nổi trên cả mặt cười
 
-            // Đợi 1s cho Ngọc nhìn chữ ĐÚNG
+            // 2. Đợi 1s cho Ngọc nhìn chữ ĐÚNG phũ phàng
             setTimeout(() => {
+                // 3. Ẩn sạch chữ và nút cũ
+                document.getElementById('main-content').classList.add('hide-all');
+                document.getElementById('btnYes').classList.add('hide-all');
+                document.getElementById('btnNo').classList.add('hide-all');
+
+                // 4. Toả nền hồng đè lên toàn bộ
                 document.getElementById('bg-glow').classList.add('show-glow');
-                // Đợi thêm 0.5s cho nền toả ra rồi hiện mặt cười
+                
+                // 5. Hiện mặt cười
                 setTimeout(() => {
                     document.getElementById('smiley').classList.add('show-smiley');
                 }, 500);
             }, 1000);
 
-            // Chuyển trang sau khi đã hiện mặt cười xong (tổng cộng 3.5s)
+            // 6. Sau 3.5s tổng cộng thì té sang Google
             setTimeout(() => {
                 window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+ngu+bẩm+sinh";
             }, 3500);
