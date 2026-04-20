@@ -1,84 +1,169 @@
-<style>
-    /* Bảng đáp án hiện ra cuối cùng */
-    #answer-sheet {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: white; color: black;
-        overflow-y: auto; display: none; padding: 20px;
-        box-sizing: border-box; z-index: 200; text-align: left;
-    }
-    .ans-item { margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-    .ans-q { font-weight: bold; color: #d32f2f; }
-</style>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gửi Ngọc</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: white;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            text-align: center;
+        }
 
-<div id="answer-sheet">
-    <h2 style="text-align:center">🎁 QUÀ CỨU TRỢ TOÁN ĐÂY 🎁</h2>
-    <div class="ans-item"><div class="ans-q">Câu 1:</div> Bán kính R = (2√3)/3 cm.</div>
-    <div class="ans-item"><div class="ans-q">Câu 2:</div> Số cạnh n = 11.</div>
-    <div class="ans-item"><div class="ans-q">Câu 3:</div> Góc BAD = 65° (hoặc 115°).</div>
-    <div class="ans-item"><div class="ans-q">Câu 4:</div> Góc ABC = 50°.</div>
-    <div class="ans-item"><div class="ans-q">Câu 5:</div> Cạnh tam giác ≈ 10 cm.</div>
-    <div class="ans-item"><div class="ans-q">Câu 6:</div> Bán kính R ≈ 14 cm.</div>
-    <div class="ans-item"><div class="ans-q">Câu 7:</div> Diện tích S = 10 cm².</div>
-    <div class="ans-item"><div class="ans-q">Câu 8:</div> Góc BAD = 60°.</div>
-    <div class="ans-item"><div class="ans-q">Câu 9:</div> Cạnh ngũ giác ≈ 7,3 cm.</div>
-    <div class="ans-item"><div class="ans-q">Câu 10:</div> Cạnh khung gỗ ≈ 69 cm.</div>
-    <div class="ans-item"><div class="ans-q">Câu 11:</div> Góc AOB = 60°.</div>
-    <div class="ans-item"><div class="ans-q">Câu 12:</div> Khoảng cách ≈ 57,7 m.</div>
-    <p style="text-align:center; font-style:italic">Chép nhanh kẻo thầy thu máy! =)))</p>
-</div>
+        /* Lớp nền toả màu hồng/tím */
+        #bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.8s ease-out;
+            z-index: 100;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
 
-<script>
-    let clicks = 0;
-    let pited = false;
-    let locked = false;
+        #smiley {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            font-weight: 900;
+            color: white;
+            opacity: 0;
+            z-index: 101;
+            transition: opacity 0.5s ease-out;
+            pointer-events: none;
+            white-space: nowrap;
+        }
 
-    function triggerTrap(obj) {
-        if (locked) return;
-        locked = true;
+        #main-content {
+            transition: opacity 0.5s ease;
+            z-index: 10;
+        }
 
-        obj.innerText = "ĐÚNG";
-        obj.style.backgroundColor = "#28a745";
+        .rainbow-text {
+            font-size: 32px;
+            font-weight: bold;
+            display: block;
+            background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: flow 5s linear infinite;
+        }
 
-        setTimeout(() => {
-            document.getElementById('main-content').classList.add('hide-all');
-            document.getElementById('btnYes').classList.add('hide-all');
-            document.getElementById('btnNo').classList.add('hide-all');
+        .normal-text { font-size: 18px; color: white; opacity: 0.8; margin-top: 10px; display: block; }
 
-            document.getElementById('bg-glow').classList.add('show-glow');
-            
+        @keyframes flow { to { background-position: 200% center; } }
+
+        .btn {
+            padding: 15px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            position: absolute;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            z-index: 50;
+            min-width: 100px;
+        }
+
+        #btnYes { background-color: #28a745; color: white; top: 70%; left: 10%; }
+        #btnNo { background-color: #dc3545; color: white; top: 70%; right: 10%; }
+
+        .show-glow { width: 300vw !important; height: 300vw !important; opacity: 1 !important; }
+        .show-smiley { opacity: 1 !important; }
+        .hide-all { opacity: 0 !important; pointer-events: none !important; }
+
+        /* Bảng đáp án */
+        #answer-sheet {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8f9fa; color: #333;
+            overflow-y: auto; display: none; padding: 25px;
+            box-sizing: border-box; z-index: 200; text-align: left;
+        }
+        .ans-header { text-align: center; color: #28a745; border-bottom: 2px dashed #28a745; padding-bottom: 10px; margin-bottom: 20px; }
+        .ans-item { margin-bottom: 12px; font-size: 16px; line-height: 1.4; }
+        .ans-q { font-weight: bold; color: #d32f2f; display: inline-block; width: 60px; }
+    </style>
+</head>
+<body>
+
+    <div id="bg-glow"></div>
+    <div id="smiley">=))))</div>
+
+    <div id="main-content">
+        <div class="title">
+            <span class="rainbow-text">Ngọc có đao không??</span>
+            <span class="normal-text">chan bố mày đi</span>
+        </div>
+    </div>
+
+    <button id="btnYes" class="btn" onclick="triggerTrap(this)">ĐÚNG</button>
+    <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
+
+    <div id="answer-sheet">
+        <div class="ans-header">
+            <h2 style="margin:0">🎁 QUÀ CỨU TRỢ TOÁN 🎁</h2>
+            <small>Chép lẹ đi "bro"!</small>
+        </div>
+        <div class="ans-item"><span class="ans-q">Câu 1:</span> R = (2√3)/3 cm</div>
+        <div class="ans-item"><span class="ans-q">Câu 2:</span> n = 11</div>
+        <div class="ans-item"><span class="ans-q">Câu 3:</span> Góc BAD = 65° (hoặc 115°)</div>
+        <div class="ans-item"><span class="ans-q">Câu 4:</span> Góc ABC = 50°</div>
+        <div class="ans-item"><span class="ans-q">Câu 5:</span> Cạnh tam giác ≈ 10 cm</div>
+        <div class="ans-item"><span class="ans-q">Câu 6:</span> Bán kính R ≈ 14 cm</div>
+        <div class="ans-item"><span class="ans-q">Câu 7:</span> Diện tích S = 10 cm²</div>
+        <div class="ans-item"><span class="ans-q">Câu 8:</span> Góc BAD = 60°</div>
+        <div class="ans-item"><span class="ans-q">Câu 9:</span> Cạnh ngũ giác ≈ 7,3 cm</div>
+        <div class="ans-item"><span class="ans-q">Câu 10:</span> Cạnh khung gỗ ≈ 69 cm</div>
+        <div class="ans-item"><span class="ans-q">Câu 11:</span> Góc AOB = 60°</div>
+        <div class="ans-item"><span class="ans-q">Câu 12:</span> Khoảng cách ≈ 57,7 m</div>
+        <p style="text-align:center; font-style:italic; margin-top:30px; color:#888;">Nguồn: Gemini 3 Flash Image Lab =))</p>
+    </div>
+
+    <script>
+        let clicks = 0;
+        let pited = false;
+        let locked = false;
+
+        function triggerTrap(obj) {
+            if (locked) return;
+            locked = true;
+
+            obj.innerText = "ĐÚNG";
+            obj.style.backgroundColor = "#28a745";
+            obj.style.zIndex = "105";
+
             setTimeout(() => {
-                document.getElementById('smiley').classList.add('show-smiley');
+                document.getElementById('main-content').classList.add('hide-all');
+                document.getElementById('btnYes').classList.add('hide-all');
+                document.getElementById('btnNo').classList.add('hide-all');
+
+                document.getElementById('bg-glow').classList.add('show-glow');
                 
-                // Thay vì chuyển trang Google, ta hiện bảng đáp án sau 2 giây hiện mặt cười
                 setTimeout(() => {
-                    document.getElementById('answer-sheet').style.display = 'block';
-                }, 2000);
-
-            }, 500);
-        }, 1000);
-    }
-
-    function troll(obj) {
-        if (locked) return;
-        clicks++;
-        if (clicks >= 5 && !pited) {
-            pited = true;
-            obj.innerText = "Sếp tha cho em!";
-            obj.style.backgroundColor = "#007bff";
-            obj.style.width = "220px";
-            return;
-        }
-        if (pited) {
-            triggerTrap(obj);
-            return;
-        }
-        const rw = Math.floor(Math.random() * 70) + 80;
-        obj.style.width = rw + "px";
-        const minT = window.innerHeight * 0.4;
-        const rx = Math.floor(Math.random() * (window.innerWidth - obj.clientWidth - 40)) + 20;
-        const ry = Math.floor(Math.random() * (window.innerHeight - obj.clientHeight - 40 - minT)) + minT;
-        obj.style.left = rx + "px";
-        obj.style.top = ry + "px";
-    }
-</script>
+                    document.getElementById('smiley').classList.add('show-smiley');
+                    
+                    // Hiện đáp án sau 2 giây trêu chọc
+                    setTimeout(() => {
+                        document
