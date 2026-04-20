@@ -1,177 +1,84 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gửi Ngọc</title>
-    <style>
-        body {
-            background-color: black;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            color: white;
-            touch-action: none;
-            user-select: none;
-            -webkit-user-select: none;
-            text-align: center;
-        }
+<style>
+    /* Bảng đáp án hiện ra cuối cùng */
+    #answer-sheet {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: white; color: black;
+        overflow-y: auto; display: none; padding: 20px;
+        box-sizing: border-box; z-index: 200; text-align: left;
+    }
+    .ans-item { margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+    .ans-q { font-weight: bold; color: #d32f2f; }
+</style>
 
-        /* Lớp nền toả màu hồng/tím */
-        #bg-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
-            border-radius: 50%;
-            opacity: 0;
-            transition: all 0.8s ease-out;
-            z-index: 100; /* Đè lên tất cả */
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
+<div id="answer-sheet">
+    <h2 style="text-align:center">🎁 QUÀ CỨU TRỢ TOÁN ĐÂY 🎁</h2>
+    <div class="ans-item"><div class="ans-q">Câu 1:</div> Bán kính R = (2√3)/3 cm.</div>
+    <div class="ans-item"><div class="ans-q">Câu 2:</div> Số cạnh n = 11.</div>
+    <div class="ans-item"><div class="ans-q">Câu 3:</div> Góc BAD = 65° (hoặc 115°).</div>
+    <div class="ans-item"><div class="ans-q">Câu 4:</div> Góc ABC = 50°.</div>
+    <div class="ans-item"><div class="ans-q">Câu 5:</div> Cạnh tam giác ≈ 10 cm.</div>
+    <div class="ans-item"><div class="ans-q">Câu 6:</div> Bán kính R ≈ 14 cm.</div>
+    <div class="ans-item"><div class="ans-q">Câu 7:</div> Diện tích S = 10 cm².</div>
+    <div class="ans-item"><div class="ans-q">Câu 8:</div> Góc BAD = 60°.</div>
+    <div class="ans-item"><div class="ans-q">Câu 9:</div> Cạnh ngũ giác ≈ 7,3 cm.</div>
+    <div class="ans-item"><div class="ans-q">Câu 10:</div> Cạnh khung gỗ ≈ 69 cm.</div>
+    <div class="ans-item"><div class="ans-q">Câu 11:</div> Góc AOB = 60°.</div>
+    <div class="ans-item"><div class="ans-q">Câu 12:</div> Khoảng cách ≈ 57,7 m.</div>
+    <p style="text-align:center; font-style:italic">Chép nhanh kẻo thầy thu máy! =)))</p>
+</div>
 
-        /* Mặt cười hiện ra giữa màn hình */
-        #smiley {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 100px;
-            font-weight: 900;
-            color: white;
-            opacity: 0;
-            z-index: 101; /* Trên cái nền hồng */
-            transition: opacity 0.5s ease-out;
-            pointer-events: none;
-            white-space: nowrap;
-        }
+<script>
+    let clicks = 0;
+    let pited = false;
+    let locked = false;
 
-        #main-content {
-            transition: opacity 0.5s ease;
-            z-index: 10;
-        }
+    function triggerTrap(obj) {
+        if (locked) return;
+        locked = true;
 
-        .rainbow-text {
-            font-size: 32px;
-            font-weight: bold;
-            display: block;
-            background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: flow 5s linear infinite;
-        }
+        obj.innerText = "ĐÚNG";
+        obj.style.backgroundColor = "#28a745";
 
-        .normal-text { font-size: 18px; color: white; opacity: 0.8; margin-top: 10px; display: block; }
+        setTimeout(() => {
+            document.getElementById('main-content').classList.add('hide-all');
+            document.getElementById('btnYes').classList.add('hide-all');
+            document.getElementById('btnNo').classList.add('hide-all');
 
-        @keyframes flow { to { background-position: 200% center; } }
-
-        .btn {
-            padding: 15px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
-            position: absolute;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            z-index: 50;
-            min-width: 100px;
-        }
-
-        #btnYes { background-color: #28a745; color: white; top: 70%; left: 10%; }
-        #btnNo { background-color: #dc3545; color: white; top: 70%; right: 10%; }
-
-        /* Hiệu ứng kích hoạt */
-        .show-glow { width: 300vw !important; height: 300vw !important; opacity: 1 !important; }
-        .show-smiley { opacity: 1 !important; }
-        .hide-all { opacity: 0 !important; pointer-events: none !important; }
-    </style>
-</head>
-<body>
-
-    <div id="bg-glow"></div>
-    <div id="smiley">=))))</div>
-
-    <div id="main-content">
-        <div class="title">
-            <span class="rainbow-text">Ngọc có đao không??</span>
-            <span class="normal-text">chan bố mày đi</span>
-        </div>
-    </div>
-
-    <button id="btnYes" class="btn" onclick="triggerTrap(this)">ĐÚNG</button>
-    <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
-
-    <script>
-        let clicks = 0;
-        let pited = false;
-        let locked = false;
-
-        function triggerTrap(obj) {
-            if (locked) return;
-            locked = true;
-
-            // 1. Chuyển nút thành ĐÚNG
-            obj.innerText = "ĐÚNG";
-            obj.style.backgroundColor = "#28a745";
-            obj.style.width = "120px";
-
-            // 2. Đợi 1s cho Ngọc nhìn chữ ĐÚNG phũ phàng
+            document.getElementById('bg-glow').classList.add('show-glow');
+            
             setTimeout(() => {
-                // 3. Ẩn sạch chữ và nút cũ
-                document.getElementById('main-content').classList.add('hide-all');
-                document.getElementById('btnYes').classList.add('hide-all');
-                document.getElementById('btnNo').classList.add('hide-all');
-
-                // 4. Toả nền hồng đè lên toàn bộ
-                document.getElementById('bg-glow').classList.add('show-glow');
+                document.getElementById('smiley').classList.add('show-smiley');
                 
-                // 5. Hiện mặt cười
+                // Thay vì chuyển trang Google, ta hiện bảng đáp án sau 2 giây hiện mặt cười
                 setTimeout(() => {
-                    document.getElementById('smiley').classList.add('show-smiley');
-                }, 500);
-            }, 1000);
+                    document.getElementById('answer-sheet').style.display = 'block';
+                }, 2000);
 
-            // 6. Sau 3.5s tổng cộng thì té sang Google
-            setTimeout(() => {
-                window.location.href = "https://www.google.com/search?q=cách+chữa+bệnh+đao+bẩm+sinh";
-            }, 3400);
+            }, 500);
+        }, 1000);
+    }
+
+    function troll(obj) {
+        if (locked) return;
+        clicks++;
+        if (clicks >= 5 && !pited) {
+            pited = true;
+            obj.innerText = "Sếp tha cho em!";
+            obj.style.backgroundColor = "#007bff";
+            obj.style.width = "220px";
+            return;
         }
-
-        function troll(obj) {
-            if (locked) return;
-            clicks++;
-
-            if (clicks >= 5 && !pited) {
-                pited = true;
-                obj.innerText = "Không!!(sếp tha)";
-                obj.style.backgroundColor = "#007bff";
-                obj.style.width = "220px";
-                return;
-            }
-
-            if (pited) {
-                triggerTrap(obj);
-                return;
-            }
-
-            const rw = Math.floor(Math.random() * 70) + 80;
-            obj.style.width = rw + "px";
-            const minT = window.innerHeight * 0.4;
-            const rx = Math.floor(Math.random() * (window.innerWidth - obj.clientWidth - 40)) + 20;
-            const ry = Math.floor(Math.random() * (window.innerHeight - obj.clientHeight - 40 - minT)) + minT;
-            obj.style.left = rx + "px";
-            obj.style.top = ry + "px";
+        if (pited) {
+            triggerTrap(obj);
+            return;
         }
-    </script>
-</body>
-</html>
+        const rw = Math.floor(Math.random() * 70) + 80;
+        obj.style.width = rw + "px";
+        const minT = window.innerHeight * 0.4;
+        const rx = Math.floor(Math.random() * (window.innerWidth - obj.clientWidth - 40)) + 20;
+        const ry = Math.floor(Math.random() * (window.innerHeight - obj.clientHeight - 40 - minT)) + minT;
+        obj.style.left = rx + "px";
+        obj.style.top = ry + "px";
+    }
+</script>
