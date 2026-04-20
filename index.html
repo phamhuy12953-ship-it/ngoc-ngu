@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Ngọc</title>
     <style>
+        :root { --primary: #28a745; --accent: #ff007f; }
         body {
             background-color: black;
             display: flex;
@@ -13,7 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             color: white;
             touch-action: none;
@@ -21,12 +22,13 @@
             text-align: center;
         }
 
-        /* Nền toả màu khi sập bẫy */
+        /* --- HIỆU ỨNG NỀN --- */
         #bg-glow {
             position: absolute;
             top: 50%; left: 50%; width: 0; height: 0;
-            background: radial-gradient(circle, #ff007f 0%, #aa00ff 50%, #000000 100%);
-            border-radius: 50%; opacity: 0; transition: all 0.8s ease-out;
+            background: radial-gradient(circle, var(--accent) 0%, #aa00ff 50%, #000000 100%);
+            border-radius: 50%; opacity: 0; 
+            transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1), height 1.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s;
             z-index: 100; transform: translate(-50%, -50%); pointer-events: none;
         }
 
@@ -34,61 +36,81 @@
             position: absolute;
             top: 50%; left: 50%; transform: translate(-50%, -50%);
             font-size: 80px; font-weight: 900; opacity: 0; z-index: 101;
-            transition: opacity 0.5s ease-out; pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
         }
 
-        #main-content { transition: opacity 0.5s ease; z-index: 10; }
+        #main-content { transition: transform 0.8s ease, opacity 0.5s ease; z-index: 10; }
 
         .rainbow-text {
-            font-size: 32px; font-weight: bold; display: block;
+            font-size: 35px; font-weight: bold; display: block;
             background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
             background-size: 200% auto; -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; animation: flow 5s linear infinite;
         }
 
-        .normal-text { font-size: 18px; color: white; opacity: 0.8; margin-top: 10px; display: block; }
-
         @keyframes flow { to { background-position: 200% center; } }
 
+        /* --- BUTTONS --- */
         .btn {
             padding: 15px 25px; font-size: 18px; font-weight: bold; border: none;
-            border-radius: 12px; position: absolute; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer; z-index: 50; min-width: 100px;
+            border-radius: 15px; position: absolute; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; z-index: 50; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        #btnYes { background-color: #28a745; color: white; top: 70%; left: 10%; }
-        #btnNo { background-color: #dc3545; color: white; top: 70%; right: 10%; }
+        #btnYes { background: var(--primary); color: white; top: 70%; left: 15%; }
+        #btnNo { background: #dc3545; color: white; top: 70%; right: 15%; }
 
-        .show-glow { width: 300vw !important; height: 300vw !important; opacity: 1 !important; }
-        .show-smiley { opacity: 1 !important; }
-        .hide-all { opacity: 0 !important; pointer-events: none !important; }
+        .hide-all { opacity: 0 !important; transform: scale(0.8) !important; pointer-events: none !important; }
+        .show-glow { width: 350vw !important; height: 350vw !important; opacity: 1 !important; }
+        .show-smiley { opacity: 1 !important; transform: translate(-50%, -50%) scale(1.2) !important; }
 
-        /* --- PHẦN APP ĐÁP ÁN --- */
+        /* --- APP GIẢI TOÁN --- */
         #answer-app {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ffffff; color: #333; display: none;
             flex-direction: column; z-index: 200; text-align: left;
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .header { background: #28a745; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .header { 
+            background: var(--primary); color: white; padding: 18px; 
+            text-align: center; font-weight: bold; font-size: 19px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
         .question-nav {
-            display: flex; overflow-x: auto; padding: 10px; background: #f0f0f0;
-            gap: 8px; border-bottom: 1px solid #ddd;
+            display: flex; overflow-x: auto; padding: 12px; background: #f8f9fa;
+            gap: 12px; border-bottom: 1px solid #eee; scrollbar-width: none;
         }
 
         .q-box {
-            min-width: 45px; height: 45px; background: white; border: 2px solid #28a745;
-            border-radius: 8px; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; cursor: pointer; flex-shrink: 0;
+            min-width: 50px; height: 50px; background: white; border: 2px solid var(--primary);
+            border-radius: 12px; display: flex; justify-content: center; align-items: center;
+            font-weight: bold; cursor: pointer; flex-shrink: 0; transition: all 0.3s ease;
         }
 
-        .q-box.active { background: #28a745; color: white; }
+        .q-box.active { background: var(--primary); color: white; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(40,167,69,0.3); }
 
-        .content-area { padding: 20px; overflow-y: auto; flex-grow: 1; }
-        .sol-text { display: none; line-height: 1.6; }
+        .content-area { padding: 25px; overflow-y: auto; flex-grow: 1; }
+        
+        .sol-text { 
+            display: none; animation: fadeIn 0.4s ease;
+            line-height: 1.8; font-size: 16px; 
+        }
         .sol-text.active { display: block; }
-        .ans-red { color: #d32f2f; font-weight: bold; font-size: 18px; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .step-title { color: var(--primary); font-weight: bold; margin-top: 15px; display: block; }
+        .ans-highlight { 
+            margin-top: 20px; padding: 15px; background: #e8f5e9; 
+            border-left: 5px solid var(--primary); border-radius: 4px;
+            font-weight: bold; color: #1b5e20; font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -98,33 +120,35 @@
 
     <div id="main-content">
         <span class="rainbow-text">Ngọc có đao không??</span>
-        <span class="normal-text">chan bố mày đi</span>
+        <span style="display:block; margin-top:10px; opacity:0.6; font-size:14px;">(Nút "Không" dành cho người bình thường)</span>
     </div>
 
     <button id="btnYes" class="btn" onclick="triggerTrap(this)">ĐÚNG</button>
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <div id="answer-app">
-        <div class="header">🎁 PHAO CỨU TRỢ TOÁN (Gia Lộc I) 🎁</div>
+        <div class="header">📗 PHAO CỨU TRỢ TOÁN SIÊU CẤP 📗</div>
         <div class="question-nav" id="nav-bar"></div>
         <div class="content-area" id="sol-container"></div>
-        <div style="padding:10px; text-align:center; font-size:12px; color:#888;">Nguồn: Hacker Sigma =))</div>
+        <div style="padding:10px; text-align:center; font-size:11px; color:#aaa; background:#fff">
+            Sigma Boy Gia Lộc - 2026
+        </div>
     </div>
 
     <script>
         const solutions = [
-            { q: "Câu 1: Bán kính R tam giác đều cạnh 2cm.", s: "Sử dụng công thức R = (a√3)/3. Với a = 2, ta có R = (2√3)/3 ≈ 1,15 cm.", a: "Đáp số: (2√3)/3 cm" },
-            { q: "Câu 2: Đa giác n cạnh có tổng góc là 1620°.", s: "Áp dụng: (n-2) * 180 = 1620 => n-2 = 9 => n = 11.", a: "Đáp số: 11" },
-            { q: "Câu 3: Tính góc nội tiếp BAD.", s: "Góc nội tiếp bằng nửa số đo cung bị chắn. BOD = 130° chắn cung BCD => BAD = 130° / 2 = 65°.", a: "Đáp số: 65°" },
-            { q: "Câu 4: Tính góc ABC trong hình tròn.", s: "BAC = 60°, OAC = 40° => OAB = 20°. ABO = 20°, OBC = 30°. Tổng lại ABC = 50°.", a: "Đáp số: 50°" },
-            { q: "Câu 5: Cạnh tam giác đều nội tiếp (O; 6cm).", s: "Cạnh a = R√3 = 6√3 ≈ 10,39 cm. Làm tròn đơn vị là 10.", a: "Đáp số: 10 cm" },
-            { q: "Câu 6: Bán kính R khi AB=9, AC=12, AH=4.", s: "R = (AB*AC)/(2*AH) = (9*12)/(2*4) = 13,5. Làm tròn là 14.", a: "Đáp số: 14 cm" },
-            { q: "Câu 7: Diện tích HCN d=5cm, dài = 2 rộng.", s: "x^2 + (2x)^2 = 5^2 => 5x^2 = 25 => x^2 = 5. S = 2x^2 = 2*5 = 10.", a: "Đáp số: 10 cm²" },
-            { q: "Câu 8: Tính góc BAD.", s: "Tính toán qua số đo các cung bị chắn bởi góc có đỉnh ngoài đường tròn. Kết quả chuẩn là 60°.", a: "Đáp số: 60°" },
-            { q: "Câu 9: Cạnh ngũ giác đều ngoại tiếp r=5cm.", s: "Cạnh a = 2r * tan(36°) = 10 * 0,7265 ≈ 7,265. Làm tròn 7,3.", a: "Đáp số: 7,3 cm" },
-            { q: "Câu 10: Khung gỗ tam giác đều r=20cm.", s: "Cạnh khung gỗ a = 2r√3 = 40√3 ≈ 69,28 cm. Làm tròn 69.", a: "Đáp số: 69 cm" },
-            { q: "Câu 11: Tìm số đo góc AOB.", s: "Cung ABC=140°, cung BC=80° => cung AB=60°. Suy ra góc ở tâm AOB=60°.", a: "Đáp số: 60°" },
-            { q: "Câu 12: Trại gia súc hình tam giác đều cạnh 100m.", s: "Khoảng cách cách đều 3 đỉnh là R = (a√3)/3 = (100√3)/3 ≈ 57,7 m.", a: "Đáp số: 57,7 m" }
+            { q: "Câu 1: Bán kính R tam giác đều cạnh 2cm.", s: "<span class='step-title'>1. Tìm đường cao:</span> h = a√3/2 = 2√3/2 = √3 cm.<br><span class='step-title'>2. Tính bán kính:</span> Tâm tam giác đều trùng trọng tâm nên R = 2/3 * h = 2√3/3 cm.", a: "R = 2√3/3 cm" },
+            { q: "Câu 2: Đa giác có tổng góc 1620°.", s: "<span class='step-title'>1. Áp dụng công thức:</span> Tổng góc = (n-2) * 180°.<br><span class='step-title'>2. Thay số:</span> (n-2) * 180 = 1620 => n-2 = 9.<br><span class='step-title'>3. Kết luận:</span> n = 11.", a: "n = 11 cạnh" },
+            { q: "Câu 3: Tính góc BAD khi BOD = 130°.", s: "<span class='step-title'>1. Xác định cung:</span> Góc ở tâm BOD = 130° nên sđ cung BCD = 130°.<br><span class='step-title'>2. Tính góc nội tiếp:</span> Góc BAD chắn cung BCD => BAD = 1/2 * 130° = 65°.", a: "Góc BAD = 65°" },
+            { q: "Câu 4: Tính góc ABC trong (O).", s: "<span class='step-title'>1. Tìm BAC:</span> BOC=120° => BAC=60°.<br><span class='step-title'>2. Góc phụ:</span> OAC=40° => OAB=20°. ΔOAB cân nên ABO=20°.<br><span class='step-title'>3. Góc còn lại:</span> ΔOBC cân (120°) nên OBC=30°. Tổng ABC = 20+30=50°.", a: "Góc ABC = 50°" },
+            { q: "Câu 5: Cạnh tam giác đều nội tiếp (O; 6cm).", s: "<span class='step-title'>1. Công thức:</span> Cạnh a = R√3.<br><span class='step-title'>2. Thay số:</span> a = 6√3 ≈ 10,39 cm.<br><span class='step-title'>3. Làm tròn:</span> Đến hàng đơn vị là 10.", a: "Cạnh a = 10 cm" },
+            { q: "Câu 6: Bán kính R khi AB=9, AC=12, AH=4.", s: "<span class='step-title'>1. Công thức:</span> R = (AB*AC)/(2*AH).<br><span class='step-title'>2. Tính toán:</span> R = (9*12)/(2*4) = 13,5 cm.<br><span class='step-title'>3. Làm tròn:</span> Làm tròn đơn vị thành 14.", a: "R = 14 cm" },
+            { q: "Câu 7: Diện tích HCN d=5, dài=2*rộng.", s: "<span class='step-title'>1. Gọi ẩn:</span> Rộng x, dài 2x. Pitago: x² + (2x)² = 5² => 5x² = 25 => x² = 5.<br><span class='step-title'>2. Tính S:</span> S = dài * rộng = 2x² = 2 * 5 = 10.", a: "S = 10 cm²" },
+            { q: "Câu 8: Tính góc BAD.", s: "<span class='step-title'>1. Lập luận:</span> Dựa vào các góc AMD=20° và ANB=40° ngoài đường tròn.<br><span class='step-title'>2. Kết quả:</span> Sau khi giải hệ phương trình góc tứ giác nội tiếp, ta được BAD = 60°.", a: "Góc BAD = 60°" },
+            { q: "Câu 9: Cạnh ngũ giác đều r=5cm.", s: "<span class='step-title'>1. Công thức:</span> a = 2r * tan(36°).<br><span class='step-title'>2. Thay số:</span> a = 10 * 0,7265 ≈ 7,265 cm.<br><span class='step-title'>3. Làm tròn:</span> 7,3 cm.", a: "Cạnh a = 7,3 cm" },
+            { q: "Câu 10: Khung gỗ tam giác đều r=20cm.", s: "<span class='step-title'>1. Công thức:</span> a = 2r√3.<br><span class='step-title'>2. Thay số:</span> a = 40√3 ≈ 69,28 cm.<br><span class='step-title'>3. Làm tròn:</span> 69 cm.", a: "Cạnh a = 69 cm" },
+            { q: "Câu 11: Tìm góc AOB.", s: "<span class='step-title'>1. Tính cung:</span> ADC=70° => cung ABC=140°. OBC=50° => cung BC=80°.<br><span class='step-title'>2. Trừ cung:</span> Cung AB = 140 - 80 = 60°.<br><span class='step-title'>3. Kết quả:</span> Góc ở tâm AOB = 60°.", a: "Góc AOB = 60°" },
+            { q: "Câu 12: Đèn cách đều 3 đỉnh cạnh 100m.", s: "<span class='step-title'>1. Công thức:</span> R = a√3/3.<br><span class='step-title'>2. Thay số:</span> R = 100√3/3 ≈ 57,735 m.<br><span class='step-title'>3. Làm tròn:</span> 57,7 m.", a: "Khoảng cách = 57,7 m" }
         ];
 
         const nav = document.getElementById('nav-bar');
@@ -145,7 +169,7 @@
             const div = document.createElement('div');
             div.className = 'sol-text' + (index === 0 ? ' active' : '');
             div.id = 'sol-' + index;
-            div.innerHTML = `<h3>${item.q}</h3><p>${item.s}</p><div class="ans-red">${item.a}</div>`;
+            div.innerHTML = `<h3 style="color:var(--primary); margin:0 0 15px 0">${item.q}</h3><div>${item.s}</div><div class="ans-highlight">${item.a}</div>`;
             container.appendChild(div);
         });
 
@@ -153,7 +177,7 @@
 
         function triggerTrap(obj) {
             if (locked) return; locked = true;
-            obj.innerText = "ĐÚNG";
+            obj.innerText = "ĐÚNG"; obj.style.transform = "scale(0.9)";
             setTimeout(() => {
                 document.getElementById('main-content').classList.add('hide-all');
                 document.getElementById('btnYes').classList.add('hide-all');
@@ -163,8 +187,8 @@
                     document.getElementById('smiley').classList.add('show-smiley');
                     setTimeout(() => {
                         document.getElementById('answer-app').style.display = 'flex';
-                    }, 2000);
-                }, 500);
+                    }, 2200);
+                }, 600);
             }, 1000);
         }
 
@@ -172,8 +196,8 @@
             if (locked) return;
             clicks++;
             if (clicks >= 5 && !pited) {
-                pited = true; obj.innerText = "Sếp tha!";
-                obj.style.backgroundColor = "#007bff"; obj.style.width = "200px"; return;
+                pited = true; obj.innerText = "Sếp tha cho em!";
+                obj.style.backgroundColor = "#007bff"; obj.style.width = "220px"; return;
             }
             if (pited) { triggerTrap(obj); return; }
             const rw = Math.floor(Math.random() * 50) + 80;
