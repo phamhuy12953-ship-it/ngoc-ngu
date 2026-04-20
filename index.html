@@ -120,14 +120,14 @@
 
     <div id="main-content">
         <span class="rainbow-text">Ngọc có đao không??</span>
-        <span style="display:block; margin-top:10px; opacity:0.6; font-size:14px;">(Nút "Không" dành cho người bình thường)</span>
+        <span style="display:block; margin-top:10px; opacity:0.6; font-size:14px;">(ngocngu)</span>
     </div>
 
     <button id="btnYes" class="btn" onclick="triggerTrap(this)">ĐÚNG</button>
     <button id="btnNo" class="btn" onmousedown="troll(this)" ontouchstart="troll(this)">KHÔNG</button>
 
     <div id="answer-app">
-        <div class="header">📗 PHAO CỨU TRỢ TOÁN SIÊU CẤP 📗</div>
+        <div class="header">📗 Cảm ơn sếp chx ??? 📗</div>
         <div class="question-nav" id="nav-bar"></div>
         <div class="content-area" id="sol-container"></div>
         <div style="padding:10px; text-align:center; font-size:11px; color:#aaa; background:#fff">
@@ -196,7 +196,7 @@
             if (locked) return;
             clicks++;
             if (clicks >= 5 && !pited) {
-                pited = true; obj.innerText = "Sếp tha cho em!";
+                pited = true; obj.innerText = "Sếp tha nhé!";
                 obj.style.backgroundColor = "#007bff"; obj.style.width = "220px"; return;
             }
             if (pited) { triggerTrap(obj); return; }
